@@ -86,7 +86,7 @@ statement = Egg::Statement.new(statement_date, closing_balance, account)
   transaction.date = date
   transaction.description = description
   transaction.money = money
-  statement.add_transaction(transaction)
+  statement.add_transaction(transaction) unless transaction.description == 'OPENING BALANCE'
 end
 
 require 'ofx'
