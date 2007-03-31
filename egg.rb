@@ -1,9 +1,9 @@
 module Egg
   require 'date'
-  class EggDate
+  class Date
     def self.build(date)
       return nil if date == ''
-      Date.parse(date).strftime('%Y%m%d')
+      ::Date.parse(date).strftime('%Y%m%d')
     end
   end
   class Account
@@ -26,8 +26,8 @@ module Egg
   class Statement
     def initialize(statement_date, closing_balance, account)
       from_date, to_date = statement_date.split(' to ')
-      @from_date = EggDate.build(from_date)
-      @to_date = EggDate.build(to_date)
+      @from_date = Date.build(from_date)
+      @to_date = Date.build(to_date)
       @closing_balance = Money.new(closing_balance).to_f
       @account = account
       @transactions = []
@@ -47,7 +47,7 @@ module Egg
   require 'digest/md5'
   class Transaction
     def initialize(date, description, money)
-      @date = EggDate.build(date)
+      @date = Date.build(date)
       @description = description.squeeze(' ')
       @amount = Money.new(money).to_f
       @ofx_id = nil
@@ -72,7 +72,7 @@ end
 require 'rubygems'
 require 'hpricot'
 
-Statement = '2007-01-18'
+Statement = '2007-03-18'
 
 html = File.open('statements/' + Statement + '.html') { |f| f.read }
 doc = Hpricot(html)
