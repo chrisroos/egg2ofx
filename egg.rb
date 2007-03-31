@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/lib/egg'
+require File.dirname(__FILE__) + '/lib/ofx'
 
 require 'rubygems'
 require 'hpricot'
@@ -27,7 +28,6 @@ statement = Egg::Statement.new(statement_date, closing_balance, account)
   statement.add_transaction(transaction)
 end
 
-require 'ofx'
 ofx_s = Ofx::Statement.new(statement)
 
 File.open(File.dirname(__FILE__) + '/ofx/' + Statement + '.ofx', 'w') do |file|
