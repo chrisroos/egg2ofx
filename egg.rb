@@ -20,8 +20,8 @@ module Egg
   class Statement
     def initialize(statement_date, closing_balance, account)
       from_date, to_date = statement_date.split(' to ')
-      @from_date = Date.parse(from_date)
-      @to_date = Date.parse(to_date)
+      @from_date = Date.parse(from_date).strftime('%Y%m%d')
+      @to_date = Date.parse(to_date).strftime('%Y%m%d')
       @closing_balance = Money.new(closing_balance).to_f
       @account = account
       @transactions = []
@@ -48,7 +48,7 @@ module Egg
     end
     attr_reader :amount
     def date=(date)
-      @date = Date.parse(date) rescue ''  
+      @date = Date.parse(date).strftime('%Y%m%d') rescue ''
     end
     attr_reader :date
     def description=(description)
