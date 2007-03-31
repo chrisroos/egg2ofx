@@ -81,7 +81,9 @@ end
 require 'rubygems'
 require 'hpricot'
 
-html = File.open('statements.aspx.html') { |f| f.read }
+Statement = '2007-03-18'
+
+html = File.open('statements/' + Statement + '.html') { |f| f.read }
 doc = Hpricot(html)
 
 # card_type = (doc/"span#lblCardTypeName").inner_html
@@ -96,6 +98,10 @@ statement = Egg::Statement.new(statement_date, closing_balance, account)
   date = (row/"td.date").inner_text
   description = (row/"td.description").inner_text
   money = (row/"td.money").inner_text
+  next if date == ''
+  if row.next_sibling && (row.next_sibling/"td.date").inner_text == '' && (row.next_sibling/"td.description").inner_text != ''
+    description += ' / ' + (row.next_sibling/"td.description").inner_text
+  end
   transaction = Egg::Transaction.new
   transaction.date = date
   transaction.description = description
@@ -106,7 +112,7 @@ end
 require 'ofx'
 ofx_s = Ofx::Statement.new(statement)
 
-File.open(File.dirname(__FILE__) + '/egg.ofx', 'w') do |file|
+File.open(File.dirname(__FILE__) + '/ofx/' + Statement + '.ofx', 'w') do |file|
   file.puts 'OFXHEADER:200'
   file.puts 'VERSION:203'
   file.puts 'SECURITY:NONE'
