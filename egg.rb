@@ -1,5 +1,10 @@
 module Egg
   require 'date'
+  class Date
+    def self.build(date)
+      Date.parse(date).strftime('%Y%m%d') rescue ''
+    end
+  end
   class Account
     def initialize(currency, number)
       @currency, @number = currency, number
@@ -20,8 +25,8 @@ module Egg
   class Statement
     def initialize(statement_date, closing_balance, account)
       from_date, to_date = statement_date.split(' to ')
-      @from_date = Date.parse(from_date).strftime('%Y%m%d')
-      @to_date = Date.parse(to_date).strftime('%Y%m%d')
+      @from_date = Date.build(from_date)
+      @to_date = Date.build(to_date)
       @closing_balance = Money.new(closing_balance).to_f
       @account = account
       @transactions = []
@@ -48,7 +53,7 @@ module Egg
     end
     attr_reader :amount
     def date=(date)
-      @date = Date.parse(date).strftime('%Y%m%d') rescue ''
+      @date = Date.build(date)
     end
     attr_reader :date
     def description=(description)
