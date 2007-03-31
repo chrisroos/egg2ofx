@@ -32,15 +32,36 @@ end
 
 transactions = []
 
+# html = File.open('statements.aspx.html') { |f| f.read }
+# transaction_table = html[/<table id="tblTransactionsTable".*?<\/table>/m]
+# body = transaction_table[/<tbody.*?<\/tbody>/m]
+# body.scan(/<tr.*?>.*?<\/tr>/m).each do |row|
+#   transaction = Egg::Transaction.new
+#   row.scan(/<td(.*)?>(.*?)<\/td>/).each do |(row_attrs, data)|
+#     css_class = row_attrs[/class="(.*?)"/, 1]
+#     transaction.__send__("#{css_class}=", data)
+#   end
+#   transactions << transaction
+# end
+
+require 'rubygems'
+require 'hpricot'
+
 html = File.open('statements.aspx.html') { |f| f.read }
-transaction_table = html[/<table id="tblTransactionsTable".*?<\/table>/m]
-body = transaction_table[/<tbody.*?<\/tbody>/m]
-body.scan(/<tr.*?>.*?<\/tr>/m).each do |row|
+doc = Hpricot(html)
+
+card_type = (doc/"span#lblCardTypeName").inner_html
+card_number = (doc/"span#lblCardNumber").inner_html
+statement_date = (doc/"span#lblStatementDate").inner_html
+
+(doc/"table#tblTransactionsTable"/"tbody"/"tr").each do |row|
+  date = (row/"td.date").inner_text
+  description = (row/"td.description").inner_text
+  money = (row/"td.money").inner_text
   transaction = Egg::Transaction.new
-  row.scan(/<td(.*)?>(.*?)<\/td>/).each do |(row_attrs, data)|
-    css_class = row_attrs[/class="(.*?)"/, 1]
-    transaction.__send__("#{css_class}=", data)
-  end
+  transaction.date = date
+  transaction.description = description
+  transaction.money = money
   transactions << transaction
 end
 
