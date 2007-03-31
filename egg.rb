@@ -12,7 +12,6 @@ Statement = '2007-03-18'
 html = File.open('statements/' + Statement + '.html') { |f| f.read }
 doc = Hpricot(html)
 
-# card_type = (doc/"span#lblCardTypeName").inner_html
 card_number = (doc/"span#lblCardNumber").inner_html
 statement_date = (doc/"span#lblStatementDate").inner_html
 closing_balance = ((doc/"table#tblTransactionsTable"/"tfoot"/"tr").first/"td").inner_html
