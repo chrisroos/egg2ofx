@@ -9,22 +9,27 @@ module Ofx
       @xml ||= (
         buffer = ''
         builder = Builder::XmlMarkup.new(:target => buffer)
-        builder.instruct!
-        builder.CCSTMTRS do
-          builder.CURDEF @statement.account_currency
-          builder.CCACCTFROM do
-            builder.ACCTID @statement.account_number
-          end
-          builder.BANKTRANLIST do
-            builder.DTSTART @statement.from_date
-            builder.DTEND @statement.to_date
-            @statement.transactions.each do |transaction|
-              builder << Transaction.new(transaction).to_xml
+        builder.OFX do
+          builder.CREDITCARDMSGSRSV1 do
+            builder.CCSTMTTRNRS do
+              builder.CCSTMTRS do
+                builder.CURDEF @statement.account_currency
+                builder.CCACCTFROM do
+                  builder.ACCTID @statement.account_number
+                end
+                builder.BANKTRANLIST do
+                  builder.DTSTART @statement.from_date
+                  builder.DTEND @statement.to_date
+                  @statement.transactions.each do |transaction|
+                    builder << Transaction.new(transaction).to_xml
+                  end
+                end
+                builder.LEDGERBAL do
+                  builder.BALAMT @statement.closing_balance
+                  builder.DTASOF @statement.to_date
+                end
+              end
             end
-          end
-          builder.LEDGERBAL do
-            builder.BALAMT @statement.closing_balance
-            builder.DTASOF @statement.to_date
           end
         end
         buffer

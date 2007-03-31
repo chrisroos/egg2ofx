@@ -1,8 +1,9 @@
 module Egg
   require 'date'
-  class Date
+  class EggDate
     def self.build(date)
-      Date.parse(date).strftime('%Y%m%d') rescue ''
+      return nil if date == ''
+      Date.parse(date).strftime('%Y%m%d')
     end
   end
   class Account
@@ -25,14 +26,15 @@ module Egg
   class Statement
     def initialize(statement_date, closing_balance, account)
       from_date, to_date = statement_date.split(' to ')
-      @from_date = Date.build(from_date)
-      @to_date = Date.build(to_date)
+      @from_date = EggDate.build(from_date)
+      @to_date = EggDate.build(to_date)
       @closing_balance = Money.new(closing_balance).to_f
       @account = account
       @transactions = []
     end
     attr_reader :from_date, :to_date, :closing_balance, :transactions
     def add_transaction(transaction)
+      transaction.date = from_date unless transaction.date
       @transactions << transaction
     end
     def account_currency
@@ -53,7 +55,7 @@ module Egg
     end
     attr_reader :amount
     def date=(date)
-      @date = Date.build(date)
+      @date = EggDate.build(date)
     end
     attr_reader :date
     def description=(description)
@@ -87,7 +89,7 @@ card_number = (doc/"span#lblCardNumber").inner_html
 statement_date = (doc/"span#lblStatementDate").inner_html
 closing_balance = ((doc/"table#tblTransactionsTable"/"tfoot"/"tr").first/"td").inner_html
 
-account = Egg::Account.new('£', card_number)
+account = Egg::Account.new('GBP', card_number)
 statement = Egg::Statement.new(statement_date, closing_balance, account)
 
 (doc/"table#tblTransactionsTable"/"tbody"/"tr").each do |row|
@@ -103,4 +105,12 @@ end
 
 require 'ofx'
 ofx_s = Ofx::Statement.new(statement)
-puts ofx_s.to_xml
+
+File.open(File.dirname(__FILE__) + '/egg.ofx', 'w') do |file|
+  file.puts 'OFXHEADER:200'
+  file.puts 'VERSION:203'
+  file.puts 'SECURITY:NONE'
+  file.puts 'OLDFILEUID:NONE'
+  file.puts 'NEWFILEUID:NONE'
+  file.puts(ofx_s.to_xml)
+end
