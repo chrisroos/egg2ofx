@@ -46,22 +46,13 @@ module Egg
   end
   require 'digest/md5'
   class Transaction
-    def initialize
-      # MAYBE INITIALIZE WITH A STATEMENT SO THAT WE CAN SET DATES FOR UNKNOWN ITEMS TO THE EARLIEST DATE OF THE STATEMENT
-      @ofx_id, clean_description = nil, nil
-    end
-    def money=(money)
-      @amount = Money.new(money).to_f
-    end
-    attr_reader :amount
-    def date=(date)
+    def initialize(date, description, money)
       @date = EggDate.build(date)
-    end
-    attr_reader :date
-    def description=(description)
       @description = description.squeeze(' ')
+      @amount = Money.new(money).to_f
+      @ofx_id = nil
     end
-    attr_reader :description
+    attr_reader :date, :description, :amount
     def ofx_id
       @ofx_id ||= Digest::MD5.hexdigest(to_s)
     end
@@ -81,7 +72,7 @@ end
 require 'rubygems'
 require 'hpricot'
 
-Statement = '2007-03-18'
+Statement = '2007-01-18'
 
 html = File.open('statements/' + Statement + '.html') { |f| f.read }
 doc = Hpricot(html)
@@ -98,15 +89,12 @@ statement = Egg::Statement.new(statement_date, closing_balance, account)
   date = (row/"td.date").inner_text
   description = (row/"td.description").inner_text
   money = (row/"td.money").inner_text
-  next if date == ''
+  next if date == '' || description == 'OPENING BALANCE'
   if row.next_sibling && (row.next_sibling/"td.date").inner_text == '' && (row.next_sibling/"td.description").inner_text != ''
     description += ' / ' + (row.next_sibling/"td.description").inner_text
   end
-  transaction = Egg::Transaction.new
-  transaction.date = date
-  transaction.description = description
-  transaction.money = money
-  statement.add_transaction(transaction) unless transaction.description == 'OPENING BALANCE'
+  transaction = Egg::Transaction.new(date, description, money)
+  statement.add_transaction(transaction)
 end
 
 require 'ofx'
