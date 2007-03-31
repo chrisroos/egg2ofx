@@ -1,13 +1,25 @@
 module Egg
   require 'date'
+  class Money
+    def initialize(money)
+      money = money.sub(/£/, '').gsub(/,/, '')
+      md = money.match(/(\d+\.\d+) ([A-Z]+)/)
+      @money = md ? Float(md[1]) : 0
+      @money = -@money if md && md[2] == 'DR'
+    end
+    def to_f
+      @money
+    end
+  end
   class Statement
-    def initialize(statement_date)
+    def initialize(statement_date, closing_balance)
       from_date, to_date = statement_date.split(' to ')
       @from_date = Date.parse(from_date)
       @to_date = Date.parse(to_date)
+      @closing_balance = Money.new(closing_balance).to_f
       @transactions = []
     end
-    attr_reader :from_date, :to_date, :transactions
+    attr_reader :from_date, :to_date, :closing_balance, :transactions
     def add_transaction(transaction)
       @transactions << transaction
     end
@@ -19,10 +31,7 @@ module Egg
       @ofx_id, clean_description = nil, nil
     end
     def money=(money)
-      money = money.sub(/£/, '').gsub(/,/, '')
-      md = money.match(/(\d+\.\d+) ([A-Z]+)/)
-      @amount = md ? Float(md[1]) : 0
-      @amount = -@amount if md && md[2] == 'DR'
+      @amount = Money.new(money).to_f
     end
     attr_reader :amount
     def date=(date)
@@ -48,11 +57,12 @@ require 'hpricot'
 html = File.open('statements.aspx.html') { |f| f.read }
 doc = Hpricot(html)
 
-card_type = (doc/"span#lblCardTypeName").inner_html
-card_number = (doc/"span#lblCardNumber").inner_html
+# card_type = (doc/"span#lblCardTypeName").inner_html
+# card_number = (doc/"span#lblCardNumber").inner_html
 statement_date = (doc/"span#lblStatementDate").inner_html
+closing_balance = ((doc/"table#tblTransactionsTable"/"tfoot"/"tr").first/"td").inner_html
 
-statement = Egg::Statement.new(statement_date)
+statement = Egg::Statement.new(statement_date, closing_balance)
 
 (doc/"table#tblTransactionsTable"/"tbody"/"tr").each do |row|
   date = (row/"td.date").inner_text

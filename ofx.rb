@@ -17,6 +17,10 @@ module Ofx
             builder << Transaction.new(transaction).to_xml
           end
         end
+        builder.LEDGERBAL do
+          builder.BALAMT @statement.closing_balance
+          builder.DTASOF @statement.to_date
+        end
         buffer
       )
     end
