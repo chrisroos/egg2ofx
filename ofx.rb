@@ -41,7 +41,7 @@ module Ofx
         buffer = ''
         builder = Builder::XmlMarkup.new(:target => buffer)
         builder.STMTTRN do
-          builder.TRNTYPE 'tran_type'
+          builder.TRNTYPE @transaction.type
           builder.DTPOSTED @transaction.date
           builder.NAME @transaction.description
           builder.TRNAMT @transaction.amount

@@ -61,6 +61,13 @@ module Egg
     def to_s
       [date, description, amount].join(', ')
     end
+    def type
+      if description =~ /INTEREST/
+        'INT'
+      else
+        (amount < 0) ? 'DEBIT' : 'CREDIT'
+      end
+    end
   end
 end
 
