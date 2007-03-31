@@ -1,12 +1,7 @@
 require File.dirname(__FILE__) + '/date'
+require File.dirname(__FILE__) + '/account'
 
 module Egg
-  class Account
-    def initialize(currency, number)
-      @currency, @number = currency, number
-    end
-    attr_reader :currency, :number
-  end
   class Money
     def initialize(money)
       money = money.sub(/£/, '').gsub(/,/, '')
