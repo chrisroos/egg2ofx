@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/date'
-require File.dirname(__FILE__) + '/account'
-require File.dirname(__FILE__) + '/money'
-require File.dirname(__FILE__) + '/statement'
-require File.dirname(__FILE__) + '/transaction'
+require File.dirname(__FILE__) + '/lib/egg/date'
+require File.dirname(__FILE__) + '/lib/egg/account'
+require File.dirname(__FILE__) + '/lib/egg/money'
+require File.dirname(__FILE__) + '/lib/egg/statement'
+require File.dirname(__FILE__) + '/lib/egg/transaction'
 
 require 'rubygems'
 require 'hpricot'
