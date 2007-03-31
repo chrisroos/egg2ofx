@@ -1,5 +1,11 @@
 module Egg
   require 'date'
+  class Account
+    def initialize(currency, number)
+      @currency, @number = currency, number
+    end
+    attr_reader :currency, :number
+  end
   class Money
     def initialize(money)
       money = money.sub(/£/, '').gsub(/,/, '')
@@ -12,16 +18,23 @@ module Egg
     end
   end
   class Statement
-    def initialize(statement_date, closing_balance)
+    def initialize(statement_date, closing_balance, account)
       from_date, to_date = statement_date.split(' to ')
       @from_date = Date.parse(from_date)
       @to_date = Date.parse(to_date)
       @closing_balance = Money.new(closing_balance).to_f
+      @account = account
       @transactions = []
     end
     attr_reader :from_date, :to_date, :closing_balance, :transactions
     def add_transaction(transaction)
       @transactions << transaction
+    end
+    def account_currency
+      @account.currency
+    end
+    def account_number
+      @account.number
     end
   end
   require 'digest/md5'
@@ -58,11 +71,12 @@ html = File.open('statements.aspx.html') { |f| f.read }
 doc = Hpricot(html)
 
 # card_type = (doc/"span#lblCardTypeName").inner_html
-# card_number = (doc/"span#lblCardNumber").inner_html
+card_number = (doc/"span#lblCardNumber").inner_html
 statement_date = (doc/"span#lblStatementDate").inner_html
 closing_balance = ((doc/"table#tblTransactionsTable"/"tfoot"/"tr").first/"td").inner_html
 
-statement = Egg::Statement.new(statement_date, closing_balance)
+account = Egg::Account.new('£', card_number)
+statement = Egg::Statement.new(statement_date, closing_balance, account)
 
 (doc/"table#tblTransactionsTable"/"tbody"/"tr").each do |row|
   date = (row/"td.date").inner_text
@@ -75,8 +89,6 @@ statement = Egg::Statement.new(statement_date, closing_balance)
   statement.add_transaction(transaction)
 end
 
-# # SORT OUT OPENING BALANCE
-# 
 require 'ofx'
 ofx_s = Ofx::Statement.new(statement)
 puts ofx_s.to_xml
