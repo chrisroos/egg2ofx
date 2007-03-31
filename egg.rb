@@ -1,11 +1,6 @@
+require File.dirname(__FILE__) + '/date'
+
 module Egg
-  require 'date'
-  class Date
-    def self.build(date)
-      return nil if date == ''
-      ::Date.parse(date).strftime('%Y%m%d')
-    end
-  end
   class Account
     def initialize(currency, number)
       @currency, @number = currency, number
