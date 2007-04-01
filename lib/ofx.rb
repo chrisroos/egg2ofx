@@ -48,7 +48,8 @@ module Ofx
         builder.STMTTRN do
           builder.TRNTYPE @transaction.type
           builder.DTPOSTED @transaction.date
-          builder.NAME @transaction.description
+          builder.NAME @transaction.payee
+          builder.MEMO @transaction.note
           builder.TRNAMT @transaction.amount
           builder.FITID @transaction.ofx_id
         end
