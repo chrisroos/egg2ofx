@@ -13,11 +13,12 @@ module Egg
       transaction.date = from_date unless transaction.date
       @transactions << transaction
     end
-    def account_currency
-      @account.currency
-    end
-    def account_number
-      @account.number
+    def method_missing(sym, *args, &blk)
+      if account_method = sym.to_s[/^account_(.+)/, 1]
+        @account.__send__(account_method, *args, &blk)
+      else
+        super(sym, *args, &blk)
+      end
     end
   end
 end
