@@ -1,0 +1,1 @@
+Dir[File.dirname(__FILE__) + '/ing/*.rb'].each { |f| require f }

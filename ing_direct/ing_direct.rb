@@ -29,20 +29,20 @@ puts transactions.collect { |tran| tran.join("\t") }
 
 #**********************************************************************************
 
-require File.dirname(__FILE__) + '/../lib/egg'
-require File.dirname(__FILE__) + '/../lib/ofx'
+require File.dirname(__FILE__) + '/../lib/ing'
+require File.dirname(__FILE__) + '/ofx'
 
 account_number = account_details[:account_number]
 statement_date = account_details[:transaction_period]
 closing_balance = transactions.first.last
 
-account = Egg::Account.new('GBP', account_number)
-statement = Egg::Statement.new(statement_date, closing_balance, account)
+account = Ing::Account.new('GBP', account_number, 'SORT_CODE')
+statement = Ing::Statement.new(statement_date, closing_balance, account)
 transactions.each do |t|
   date = t.first
   description = t[1]
   money = t[2]
-  transaction = Egg::Transaction.new(date, description, money)
+  transaction = Ing::Transaction.new(date, description, money)
   statement.add_transaction(transaction)
 end
 
