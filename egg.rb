@@ -15,7 +15,6 @@ Dir[StatementsFolder + '*.html'].each do |statement_html_file|
   card_number = (doc/"span#lblCardNumber").inner_html
   statement_date = (doc/"span#lblStatementDate").inner_html
   closing_balance = ((doc/"table#tblTransactionsTable"/"tfoot"/"tr").first/"td").inner_html
-  
   account = Egg::Account.new('GBP', card_number)
   statement = Egg::Statement.new(statement_date, closing_balance, account)
   
@@ -35,11 +34,16 @@ Dir[StatementsFolder + '*.html'].each do |statement_html_file|
   
   filename = File.basename(statement_html_file, '.html')
   File.open(OfxOutputFolder + filename + '.ofx', 'w') do |file|
-    file.puts 'OFXHEADER:200'
-    file.puts 'VERSION:203'
+    # OFX 1.0 format - SGML
+    file.puts 'OFXHEADER:100'
+    file.puts 'VERSION:103'
     file.puts 'SECURITY:NONE'
+    file.puts 'ENCODING:UNICODE'
     file.puts 'OLDFILEUID:NONE'
     file.puts 'NEWFILEUID:NONE'
+    # OFX 2.0 format - XML
+    # file.puts %q[<?xml version="1.0" encoding="UTF-8"?>]
+    # file.puts %q[<?OFX OFXHEADER="200" VERSION="200" SECURITY="NONE" OLDFILEUID="NONE" NEWFILEUID="NONE"?>]
     file.puts(ofx_s.to_xml)
   end
   
