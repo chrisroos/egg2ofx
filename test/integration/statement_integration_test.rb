@@ -1,10 +1,8 @@
-require 'test_helper'
+require File.join(File.dirname(__FILE__), '..', 'test_helper')
 
 module Egg
   
   class StatmentParserIntegrationTest < Test::Unit::TestCase
-  
-    FIXTURES = File.join(File.dirname(__FILE__), 'fixtures')
     
     def setup
       html = File.read(File.join(FIXTURES, 'statement.html'))
