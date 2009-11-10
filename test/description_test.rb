@@ -1,5 +1,4 @@
-require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/egg/description'
+require 'test_helper'
 
 module Egg
   class DescriptionTest < Test::Unit::TestCase

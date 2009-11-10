@@ -1,5 +1,4 @@
 require 'digest/md5'
-require File.expand_path(File.dirname(__FILE__) + '/description')
 
 module Egg
   class Transaction

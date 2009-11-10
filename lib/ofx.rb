@@ -1,5 +1,6 @@
+require 'builder'
+
 module Ofx
-  require 'builder'
   class Statement
     def initialize(statement)
       @statement = statement
