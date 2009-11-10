@@ -23,7 +23,14 @@ module Ofx
                   builder.DTSTART @statement.from_date
                   builder.DTEND @statement.to_date
                   @statement.transactions.each do |transaction|
-                    builder << Transaction.new(transaction).to_xml
+                    builder.STMTTRN do
+                      builder.TRNTYPE transaction.type
+                      builder.DTPOSTED transaction.date
+                      builder.NAME transaction.payee
+                      builder.MEMO transaction.note
+                      builder.TRNAMT transaction.amount
+                      builder.FITID transaction.ofx_id
+                    end
                   end
                 end
                 builder.LEDGERBAL do
@@ -33,27 +40,6 @@ module Ofx
               end
             end
           end
-        end
-        buffer
-      )
-    end
-  end
-  class Transaction
-    def initialize(transaction)
-      @transaction = transaction
-      @xml = nil
-    end
-    def to_xml
-      @xml ||= (
-        buffer = ''
-        builder = Builder::XmlMarkup.new(:target => buffer)
-        builder.STMTTRN do
-          builder.TRNTYPE @transaction.type
-          builder.DTPOSTED @transaction.date
-          builder.NAME @transaction.payee
-          builder.MEMO @transaction.note
-          builder.TRNAMT @transaction.amount
-          builder.FITID @transaction.ofx_id
         end
         buffer
       )
