@@ -12,7 +12,7 @@ module Egg
     
     def setup
       html = File.read(File.join(FIXTURES, 'recent_transactions.html'))
-      @ofx = Egg::RecentTransactionsParser.new(html).to_ofx
+      @ofx = Egg::Parser.new(html).to_ofx
       @xml = Hpricot::XML(@ofx)
     end
     
