@@ -25,12 +25,8 @@ module Egg
         statement.add_transaction(transaction)
       end
 
-      ofx_s = Ofx::Statement.new(statement)
-<<-EndOfx
-<?xml version="1.0" encoding="UTF-8"?>
-<?OFX OFXHEADER="200" VERSION="200" SECURITY="NONE" OLDFILEUID="NONE" NEWFILEUID="NONE"?>
-#{ofx_s.to_xml}
-EndOfx
+      ofx_statement = Ofx::Statement.new(statement)
+      ofx_statement.to_xml
     end
   end
 end
