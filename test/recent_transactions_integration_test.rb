@@ -1,8 +1,8 @@
 require 'test/unit'
 require 'rubygems'
 require 'hpricot'
-require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'egg')
-require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'ofx')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'egg')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'ofx')
 
 module Egg
   

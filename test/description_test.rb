@@ -1,5 +1,5 @@
 require 'test/unit'
-require File.dirname(__FILE__) + '/../../lib/egg/description'
+require File.dirname(__FILE__) + '/../lib/egg/description'
 
 module Egg
   class DescriptionTest < Test::Unit::TestCase
