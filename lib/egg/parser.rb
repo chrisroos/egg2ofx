@@ -2,11 +2,15 @@ module Egg
   
   class Parser
     
+    class UnparsableHtmlError < StandardError; end
+    
     def initialize(html)
-      @parser = if html =~ /\<h1.*?>your egg card statement/i
-        StatementParser.new(html)
+      if html =~ /your egg card statement/i
+        @parser = StatementParser.new(html)
+      elsif html =~ /egg card recent transactions/i
+        @parser = RecentTransactionsParser.new(html)
       else
-        RecentTransactionsParser.new(html)
+        raise UnparsableHtmlError
       end
     end
     
