@@ -5,13 +5,13 @@ module Egg
     
     def test_should_instantiate_a_statement_parser_if_the_html_looks_like_a_statement
       html = "Your Egg Card statement"
-      StatementParser.expects(:new).with(html)
+      StatementDocumentParser.expects(:new).with(html)
       paser = Parser.new(html)
     end
     
     def test_should_instantiate_a_recent_transactions_parser_if_the_html_looks_like_it_contains_recent_transactions
       html = "Egg Card Recent transactions"
-      RecentTransactionsParser.expects(:new).with(html)
+      RecentTransactionsDocumentParser.expects(:new).with(html)
       paser = Parser.new(html)
     end
     

@@ -1,6 +1,6 @@
 module Egg
   
-  class StatementParser < DocumentParser
+  class StatementDocumentParser < DocumentParser
   
   private
   

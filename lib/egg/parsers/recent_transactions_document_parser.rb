@@ -1,6 +1,6 @@
 module Egg
   
-  class RecentTransactionsParser < DocumentParser
+  class RecentTransactionsDocumentParser < DocumentParser
 
   private
   

@@ -1,3 +1,12 @@
+$: << File.dirname(__FILE__)
+
+require 'parsers/document_parser'
+require 'parsers/transaction_parser'
+require 'parsers/statement_document_parser'
+require 'parsers/statement_transaction_parser'
+require 'parsers/recent_transactions_document_parser'
+require 'parsers/recent_transactions_transaction_parser'
+
 module Egg
   
   class Parser
@@ -6,9 +15,9 @@ module Egg
     
     def initialize(html)
       if html =~ /your egg card statement/i
-        @parser = StatementParser.new(html)
+        @parser = StatementDocumentParser.new(html)
       elsif html =~ /egg card recent transactions/i
-        @parser = RecentTransactionsParser.new(html)
+        @parser = RecentTransactionsDocumentParser.new(html)
       else
         raise UnparsableHtmlError
       end
