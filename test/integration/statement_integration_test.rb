@@ -22,6 +22,11 @@ module Egg
       assert (doc%':eq(0)').procins?
     end
     
+    def test_should_have_the_ofxheader_version_as_the_first_ofx_processing_instruction_attribute_for_wesabe_compatibility
+      ofx_processing_instruction = @ofx.split("\n")[1] # Should be on the second line
+      assert_match /\?OFX OFXHEADER="200"/, ofx_processing_instruction
+    end
+    
     def test_should_declare_the_currency_as_gbp
       assert_equal 'GBP', (@xml/:OFX/:CREDITCARDMSGSRSV1/:CCSTMTTRNRS/:CCSTMTRS/:CURDEF).inner_text
     end
