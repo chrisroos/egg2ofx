@@ -30,10 +30,10 @@ spec = Gem::Specification.new do |s|
   # Change these as appropriate
   s.name              = "egg2ofx"
   s.version           = "0.1.0"
-  s.summary           = "What this thing does"
+  s.summary           = "Converts the html statements and recent transactions from the egg site to ofx"
   s.author            = "Chris Roos"
-  s.email             = "youremail@example.com"
-  s.homepage          = "http://yoursite.example.com"
+  s.email             = "chris@seagul.co.uk"
+  s.homepage          = "http://chrisroos.co.uk"
 
   s.has_rdoc          = true
   s.extra_rdoc_files  = %w(README)
@@ -48,9 +48,11 @@ spec = Gem::Specification.new do |s|
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
   # s.add_dependency("some_other_gem", "~> 0.1.0")
+  s.add_dependency 'hpricot'
   
   # If your tests use any gems, include them here
   # s.add_development_dependency("mocha")
+  s.add_development_dependency 'mocha'
 
   # If you want to publish automatically to rubyforge, you'll may need
   # to tweak this, and the publishing task below too.
