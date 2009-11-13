@@ -1,6 +1,5 @@
 $: << File.dirname(__FILE__)
 
-require 'rubygems'
 require 'hpricot'
 
 require 'egg/date'
