@@ -11,6 +11,10 @@ module Egg
     def skip?
       false
     end
+    
+    def money
+      (row/"td.money").inner_text.sub(/^\?/, '').sub(/^£/, '')
+    end
   
     def date
       (row/"td.date").inner_text

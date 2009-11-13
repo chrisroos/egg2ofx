@@ -10,10 +10,6 @@ module Egg
       description
     end
   
-    def money
-      (row/"td.money").inner_text
-    end
-  
     def skip?
       date == '' or description == 'OPENING BALANCE'
     end
