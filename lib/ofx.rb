@@ -11,7 +11,7 @@ module Ofx
         buffer = ''
         builder = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
         builder.instruct!
-        builder << '<?OFX OFXHEADER="200" VERSION="200" SECURITY="NONE" OLDFILEUID="NONE" NEWFILEUID="NONE"?>'
+        builder << "<?OFX OFXHEADER=\"200\" VERSION=\"200\" SECURITY=\"NONE\" OLDFILEUID=\"NONE\" NEWFILEUID=\"NONE\"?>\n"
         builder.OFX do
           builder.CREDITCARDMSGSRSV1 do
             builder.CCSTMTTRNRS do
