@@ -20,7 +20,7 @@ spec = Gem::Specification.new do |s|
   
   # Change these as appropriate
   s.name              = "egg2ofx"
-  s.version           = "0.1.0"
+  s.version           = "0.1.1"
   s.summary           = "Converts the html statements and recent transactions from the egg site to ofx"
   s.author            = "Chris Roos"
   s.email             = "chris@seagul.co.uk"
