@@ -1,1 +1,20 @@
-This appears to be in a bit of a mess.  I seem to remember starting with the egg.html -> egg.ofx conversion and then wanting to do the same with ing-direct.  I'm not sure how much of it works anymore.
+What is it?
+===========
+A utility to convert html statements from egg.com into Ofx.  I use this to convert my egg statements and recent transactions into a format suitable for upload to wesabe.com.
+
+
+Installation
+============
+$ gem install egg2ofx --source http://gemcutter.org
+
+
+Usage
+=====
+Sign in to your egg credit card account and view your recent transactions or a statement for a specific date.  Save the page (html only) to your machine and then run:
+
+$ egg2ofx downloaded-transactions.html > egg-statement.ofx
+
+
+Contact
+=======
+Email me with any questions or problems at chris@seagul.co.uk.
