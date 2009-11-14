@@ -20,7 +20,7 @@ spec = Gem::Specification.new do |s|
   
   # Change these as appropriate
   s.name              = "egg2ofx"
-  s.version           = "0.1.1"
+  s.version           = "0.1.2"
   s.summary           = "Converts the html statements and recent transactions from the egg site to ofx"
   s.author            = "Chris Roos"
   s.email             = "chris@seagul.co.uk"
@@ -40,6 +40,7 @@ spec = Gem::Specification.new do |s|
   # relevant versions
   # s.add_dependency("some_other_gem", "~> 0.1.0")
   s.add_dependency 'hpricot'
+  s.add_dependency 'builder'
   
   # If your tests use any gems, include them here
   # s.add_development_dependency("mocha")
