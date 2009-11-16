@@ -4,7 +4,8 @@ require File.join(File.dirname(__FILE__), '..', 'lib', 'egg')
 
 html_file = ARGV.shift
 unless html_file and File.exists?(html_file)
-  raise "Usage: egg2ofx path/to/egg-html-file"
+  puts "Usage: egg2ofx path/to/egg-html-file"
+  exit 1
 end
 
 html   = File.open(html_file) { |f| f.read }
